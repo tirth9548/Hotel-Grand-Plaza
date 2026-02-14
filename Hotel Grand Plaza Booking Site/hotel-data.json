@@ -1,0 +1,55 @@
+{
+  "rooms": [
+    {
+      "id": "r1",
+      "name": "Deluxe Single Room",
+      "price": 2500,
+      "capacity": 2,
+      "features": ["King Bed", "AC", "WiFi", "TV", "Room Service"]
+    },
+    {
+      "id": "r2",
+      "name": "Executive Double Room",
+      "price": 4000,
+      "capacity": 4,
+      "features": ["2 Queen Beds", "AC", "WiFi", "Mini Bar", "Balcony"]
+    },
+    {
+      "id": "r3",
+      "name": "Presidential Suite",
+      "price": 8000,
+      "capacity": 6,
+      "features": ["Master Bedroom", "Living Room", "Jacuzzi", "Butler Service", "City View"]
+    },
+    {
+      "id": "r4",
+      "name": "Family Suite",
+      "price": 6000,
+      "capacity": 5,
+      "features": ["2 Bedrooms", "Kitchen", "AC", "WiFi", "Kids Play Area"]
+    }
+  ],
+  "halls": [
+    {
+      "id": "h1",
+      "name": "Conference Hall",
+      "price": 15000,
+      "capacity": 100,
+      "features": ["Projector", "Sound System", "AC", "WiFi", "Whiteboard"]
+    },
+    {
+      "id": "h2",
+      "name": "Banquet Hall",
+      "price": 30000,
+      "capacity": 300,
+      "features": ["Stage", "Catering Service", "Decorations", "Parking", "Valet Service"]
+    },
+    {
+      "id": "h3",
+      "name": "Party Hall",
+      "price": 20000,
+      "capacity": 150,
+      "features": ["DJ Setup", "Dance Floor", "Bar Counter", "LED Lighting", "Lounge Area"]
+    }
+  ]
+}

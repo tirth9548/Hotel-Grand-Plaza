@@ -1,0 +1,196 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #0f172a;
+    color: white;
+}
+
+/* ================= LOGIN ================= */
+.login-box {
+    max-width: 360px;
+    margin: 120px auto;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    /* TEXT */
+    font-weight: 700;
+
+    /* ANIMATION */
+    animation: fadeSlideIn 0.8s ease forwards;
+}
+
+.login-box * {
+    font-weight: 700;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    font-weight: 700;
+    transition: box-shadow 0.3s ease;
+}
+
+.login-box input:focus {
+    box-shadow: 0 0 0 2px gold;
+}
+
+.login-box input::placeholder {
+    font-weight: 700;
+    color: #64748b;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: gold;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255,215,0,0.4);
+}
+
+.hint {
+    font-size: 13px;
+    color: #cbd5f5;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+/* ================= HIDE / SHOW ================= */
+.hidden {
+    display: none !important;
+}
+
+/* ================= DASHBOARD ANIMATION ================= */
+.dashboard {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+    background: linear-gradient(135deg,#1e3a8a,#2563eb);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-btn {
+    background: crimson;
+    border: none;
+    padding: 8px 14px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.logout-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ================= STATS ================= */
+.stats {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+}
+
+.card {
+    flex: 1;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.card i {
+    font-size: 28px;
+    color: gold;
+}
+
+/* ================= TABLE ================= */
+.table-box {
+    padding: 20px 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #2563eb;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background: #263449;
+}
+
+button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.danger {
+    margin: 20px 30px;
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 12px;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

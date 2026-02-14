@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin User Manager</title>
+    
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Layout Styles */
+        body { padding: 0; margin: 0; background: #0f172a; font-family: 'Inter', sans-serif; }
+        
+        /* ================= PRELOADER CSS ================= */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #0f172a; z-index: 99999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-content img { width: 250px; margin-bottom: 30px; animation: logoPulse 2s infinite ease-in-out; }
+        .loader-ring {
+            width: 50px; height: 50px; margin: 0 auto;
+            border: 4px solid rgba(255, 215, 0, 0.2); border-top: 4px solid gold;
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        .welcome-text { animation: fadeInUp 1s ease-out; }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes logoPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.85; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= MAIN PANEL (Hidden by Default) ================= */
+        .main-panel { display: none; opacity: 0; transition: opacity 0.5s ease; }
+        .main-panel.active { display: block; opacity: 1; }
+
+        /* Dashboard Header */
+        .admin-header {
+            background: rgba(10, 14, 19, 0.95); backdrop-filter: blur(12px);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-bottom: 40px;
+        }
+        .header-brand { display: flex; align-items: center; gap: 15px; }
+        .header-brand img { height: 50px; object-fit: contain; }
+        .header-brand span { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: #D4AF37; letter-spacing: 0.5px; }
+        .header-actions a {
+            color: #cbd5e1; text-decoration: none; font-weight: 600; padding: 10px 20px;
+            border-radius: 6px; transition: all 0.3s ease; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); display: inline-flex; align-items: center; gap: 8px;
+        }
+        .header-actions a:hover { background: #ef4444; color: white; transform: translateY(-2px); border-color: #ef4444; }
+
+        /* Panel Styles */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .page-title { color: white; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; }
+        .panel { background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #334155; animation: fadeIn 0.5s ease; transition: background 0.2s; }
+        .user-row:hover { background: rgba(255,255,255,0.02); }
+        .user-row:last-child { border-bottom: none; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+        .btn-delete:hover { background: #dc2626; transform: scale(1.05); }
+        .badge { font-size:11px; border:1px solid #10b981; padding:3px 8px; border-radius:12px; margin-left:8px; color:#10b981; background: rgba(16, 185, 129, 0.1); text-transform: uppercase; font-weight: bold; }
+        
+        /* Add User Box */
+        .add-user-box { display: block; margin-top: 20px; padding-top: 20px; border-top: 1px solid #334155; }
+        .input-dark { background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 6px; color: white; outline: none; width: 100%; box-sizing: border-box; }
+        .input-dark:focus { border-color: #D4AF37; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
+        .btn-add { background: #10b981; color: black; font-weight: bold; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .btn-add:hover { background: #059669; }
+        
+        /* Radio Button Container */
+        .radio-group { display: flex; gap: 20px; align-items: center; color: white; font-size: 14px; margin-top: 15px; }
+        .radio-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .radio-group input[type="radio"] { accent-color: #D4AF37; transform: scale(1.2); cursor: pointer; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="preloader">
+    <div class="loader-content" style="text-align: center;">
+        <img src="Hotel Grand Plaza Logo.png" alt="Admin Loading">
+        <div class="loader-ring"></div>
+        <h2 class="welcome-text" style="color: #D4AF37; margin-top: 25px; font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; letter-spacing: 1px;">
+            Welcome To User Management
+        </h2>
+    </div>
+</div>
+
+<div id="securityScreen" class="hidden">
+    <div class="login-box">
+        <div style="text-align: center; margin-bottom: 10px;">
+            <img src="Hotel Grand Plaza Logo.png" alt="Grand Plaza Logo" style="width: 140px; margin-bottom: 5px;">
+        </div>
+        
+        <h2 style="font-family: 'Inter', sans-serif; font-weight: bold; margin-bottom: 20px;">Login</h2>
+        
+        <div id="loginFields">
+            <input type="text" id="secUser" placeholder="Primary Admin Username">
+            <input type="password" id="secPass" placeholder="Password">
+            <button onclick="verifySecurity()">Login</button>
+            <div style="margin-top: 15px; font-size: 13px; display: flex; justify-content: center;">
+                <a href="admin.html" style="color: red; text-decoration: none;">Cancel & Return</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="managementPanel" class="main-panel">
+    <nav class="admin-header">
+        <div class="header-brand">
+            <img src="Hotel Grand Plaza Logo.png" alt="Grand Plaza Logo">
+            <span>Hotel Grand Plaza</span>
+        </div>
+        <div class="header-actions">
+            <a href="#" onclick="logoutPrimary()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="page-title"><i class="fas fa-users-cog"></i> Admin User Management</h2>
+
+        <div class="panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                <h3 style="color: #e2e8f0; margin:0;">Active Admins</h3>
+                <span style="background: #2563eb; padding: 5px 12px; border-radius: 20px; font-size: 0.9em; font-weight: bold;">
+                    Total: <span id="count">0</span>
+                </span>
+            </div>
+            
+            <div id="userList"></div>
+
+            <div class="add-user-box">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <input type="text" id="newUsername" class="input-dark" placeholder="New Username">
+                    <input type="text" id="newPassword" class="input-dark" placeholder="New Password">
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                    <div class="radio-group">
+                        <strong style="color: #94a3b8; margin-right: 5px;">Role:</strong>
+                        <label>
+                            <input type="radio" name="adminRole" value="primary"> Primary Admin
+                        </label>
+                        <label>
+                            <input type="radio" name="adminRole" value="normal" checked> Normal Admin
+                        </label>
+                    </div>
+                    <button class="btn-add" onclick="createNewUser()"><i class="fas fa-plus"></i> Add Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="Manage Users.js"></script>
+
+<script>
+    window.addEventListener("load", function() {
+        // Check if primary admin is already verified this session
+        const isVerified = sessionStorage.getItem('primaryAdminVerified') === 'true';
+
+        if (!sessionStorage.getItem('manageUsersAnimationPlayed')) {
+            // First time loading the tab
+            setTimeout(function() {
+                document.getElementById("preloader").classList.add("hidden");
+                
+                if (isVerified) {
+                    document.getElementById("managementPanel").classList.add("active");
+                    if(typeof loadUsers === 'function') loadUsers();
+                    // Auto-focus Add User field
+                    document.getElementById("newUsername").focus(); 
+                } else {
+                    document.getElementById("securityScreen").classList.remove("hidden");
+                    // Auto-focus Login Username field
+                    document.getElementById("secUser").focus(); 
+                }
+                
+                sessionStorage.setItem('manageUsersAnimationPlayed', 'true');
+            }, 2500); 
+        } else {
+            // Refreshing the page (no animation)
+            document.getElementById("preloader").style.display = "none";
+            
+            if (isVerified) {
+                document.getElementById("managementPanel").classList.add("active");
+                if(typeof loadUsers === 'function') loadUsers();
+                // Auto-focus Add User field
+                document.getElementById("newUsername").focus();
+            } else {
+                document.getElementById("securityScreen").classList.remove("hidden");
+                // Auto-focus Login Username field
+                document.getElementById("secUser").focus();
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
